@@ -1,16 +1,21 @@
-# Compiled class file
+# Environment — never commit secrets
+.env
+
+# macOS
+.DS_Store
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Java / JVM
 *.class
-
-# Log file
 *.log
+hs_err_pid*
+replay_pid*
 
-# BlueJ files
-*.ctxt
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# Package Files #
+# Archives
 *.jar
 *.war
 *.nar
@@ -19,8 +24,13 @@
 *.tar.gz
 *.rar
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
-replay_pid*
+# Gradle (backend)
+backend/build/
+backend/.gradle/
+backend/.kotlin/  # Kotlin Gradle plugin cache
 
-.DS_Store
+# Frontend (to be added in Phase 02)
+# node_modules/
+
+# Spring Boot
+backend/src/main/resources/application-local.yml
