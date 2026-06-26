@@ -1,0 +1,3 @@
+-- Baseline schema — Phase 01
+-- No domain tables yet; Flyway will create flyway_schema_history on first run.
+-- Extensions and schema setup belong here as the project evolves.

@@ -1,0 +1,9 @@
+.gradle/
+build/
+.kotlin/
+CLAUDE.md
+README.md
+# gradle.properties sets org.gradle.java.home to a local SDKMAN path
+# that doesn't exist inside the container — exclude it so Gradle uses
+# the JDK already present in the builder image.
+gradle.properties

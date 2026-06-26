@@ -125,6 +125,59 @@ These apply during the REFACTOR step and when designing testable code:
 
 ---
 
+## Testcontainers — Standard for Java Integration Tests (Spring Boot + OrbStack)
+
+### Dependencies (Gradle Kotlin DSL)
+
+```kotlin
+testImplementation("org.springframework.boot:spring-boot-starter-test")
+testImplementation("org.springframework.boot:spring-boot-testcontainers")
+testImplementation("org.testcontainers:junit-jupiter")
+testImplementation("org.testcontainers:postgresql")  // or other DB/infra module
+```
+
+### Test pattern with `@ServiceConnection`
+
+Use `@ServiceConnection` so Spring Boot automatically configures the datasource to point to the container — no manual port or URL configuration needed:
+
+```java
+@SpringBootTest
+@Testcontainers
+class VideoRepositoryIntegrationTest {
+
+    @Container
+    @ServiceConnection
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:17-alpine");
+
+    @Autowired
+    JdbcTemplate jdbcTemplate;
+
+    @Test
+    void givenEmptyDatabase_whenCountVideos_thenReturnsZero() {
+        // ...
+    }
+}
+```
+
+### Required `build.gradle.kts` configuration (OrbStack)
+
+See `machine-environment.md` → **OrbStack + Testcontainers** for context. The `jvmArgs` below is required on this machine:
+
+```kotlin
+tasks.withType<Test> {
+    useJUnitPlatform()
+    // docker-java bundled in Testcontainers reads "api.version" as a system property.
+    // OrbStack rejects requests with API < 1.40; docker-java default is 1.32.
+    jvmArgs("-Dapi.version=1.41")
+}
+```
+
+### Never use H2 in integration tests
+
+The 12-Factor X – Dev/prod parity rule requires integration tests to run against the same engine as production. H2 and SQLite behave differently from PostgreSQL (types, constraints, functions). Always use Testcontainers with the real PostgreSQL image.
+
+---
+
 ## What NOT to do
 
 - Do NOT write tests after implementation and call it TDD.

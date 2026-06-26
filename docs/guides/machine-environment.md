@@ -12,6 +12,29 @@ Never suggest installing Docker Desktop. Never ask which container runtime to us
 
 Before any container or Kubernetes task, read `./docs/guides/docker-k8s.md`.
 
+### OrbStack + Testcontainers (Java) — Required configuration
+
+OrbStack uses its own socket (`~/.orbstack/run/docker.sock`) and requires Docker API ≥ 1.40. The docker-java library bundled in Testcontainers connects via `/var/run/docker.sock` (which does not exist in OrbStack) and sends requests with API version 1.32 — both are rejected.
+
+**One-time setup (creates a symlink that persists until manually removed; the socket file at the target disappears when OrbStack stops, but the symlink itself remains):**
+
+```bash
+sudo ln -sf ~/.orbstack/run/docker.sock /var/run/docker.sock
+```
+
+**Required `build.gradle.kts` configuration for every project using Testcontainers:**
+
+```kotlin
+tasks.withType<Test> {
+    useJUnitPlatform()
+    // docker-java bundled in Testcontainers reads "api.version" as a system property.
+    // OrbStack rejects requests with API < 1.40; docker-java default is 1.32.
+    jvmArgs("-Dapi.version=1.41")
+}
+```
+
+> **Quick diagnosis:** if tests fail with `BadRequestException: client version 1.32 is too old`, the cause is the API version. If they fail with `NoSuchFileException (/var/run/docker.sock)`, the symlink does not exist.
+
 ---
 
 ## Managing Java Versions → SDKMAN!
@@ -154,6 +177,22 @@ Gradle is not installed globally. Follow this order:
 - Distinguish Groovy DSL (`build.gradle`) from Kotlin DSL (`build.gradle.kts`) when editing build scripts — the syntax differs.
 
 Never install Gradle via Homebrew.
+
+### Kotlin Gradle DSL + Java 25 — Known bug
+
+The Kotlin Gradle plugin bundled in Gradle 8.x fails to parse the Java version string `25.0.2` (a bug in Kotlin's IntelliJ core library). The build breaks with `IllegalArgumentException: 25.0.2`.
+
+**Workaround:** run the Gradle daemon on Java 21, but still compile the code with the Java 25 toolchain:
+
+```properties
+# backend/gradle.properties — replace <path> with your local SDKMAN! Java 21 path
+# Example: $HOME/.sdkman/candidates/java/21.0.10-tem
+org.gradle.java.home=<path-to-java-21>
+```
+
+> **Note:** `gradle.properties` is committed to the repository with the project author's machine path. After cloning, update `org.gradle.java.home` to match your local SDKMAN! installation. Run `sdk list java` to find installed versions.
+
+The `java { toolchain { languageVersion = JavaLanguageVersion.of(25) } }` in `build.gradle.kts` still compiles the code with Java 25 — only the Gradle daemon runs on Java 21.
 
 ---
 
