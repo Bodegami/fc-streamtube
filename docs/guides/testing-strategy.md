@@ -178,6 +178,20 @@ The 12-Factor X – Dev/prod parity rule requires integration tests to run again
 
 ---
 
+## E2E Tests → playwright-cli
+
+For E2E tests on the frontend or full user flows, use `playwright-cli`. Before any browser automation task, read `./docs/guides/playwright.md`.
+
+E2E tests follow the same TDD cycle and FIRST principles as other test types. Use the Claude Code skill `/e2e-nav-test` to auto-generate test cases from the running app.
+
+| Scope | Tool |
+|---|---|
+| Unit / Integration | Language-native (pytest, JUnit, Jest) |
+| E2E / Browser flows | `playwright-cli` |
+| UI design review | `playwright-cli show --annotate` |
+
+---
+
 ## What NOT to do
 
 - Do NOT write tests after implementation and call it TDD.

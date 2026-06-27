@@ -34,3 +34,9 @@ backend/.kotlin/  # Kotlin Gradle plugin cache
 
 # Spring Boot
 backend/src/main/resources/application-local.yml
+
+# Tooling scratch — playwright-cli browser captures (console logs + page snapshots)
+.playwright-cli/
+
+# Design source binaries (kept in Figma; links live in inventories/specs)
+*.fig

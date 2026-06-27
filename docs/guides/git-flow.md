@@ -190,6 +190,47 @@ git switch -
 
 ---
 
+## Merging a Feature Branch into Main
+
+When a feature branch is ready to land, use **squash merge** to keep the `main` history linear — one logical commit per feature, regardless of how many intermediate commits exist on the branch.
+
+### Standard flow
+
+```bash
+# 1. Switch to main and sync with remote
+git checkout main
+git pull
+
+# 2. Squash all feature branch commits into the index (does not create a commit yet)
+git merge --squash <branch-name>
+
+# 3. Create a single commit following Conventional Commits
+git commit -m "feat(scope): short description
+
+- bullet summarizing key changes
+- bullet summarizing key changes"
+
+# 4. Push main
+git push origin main
+```
+
+### Why squash merge
+
+- `main` history stays readable — one commit = one feature or fix.
+- Individual WIP commits on the feature branch (fixups, renamings, experiments) do not pollute `main`.
+- The squash commit message is the canonical record; write it as if the feature branch never existed.
+
+### After merging
+
+Delete the remote branch to keep the repo clean:
+
+```bash
+git push origin --delete <branch-name>
+git branch -d <branch-name>   # delete local branch
+```
+
+---
+
 ## Pull Requests
 
 ### Preferred: GitHub CLI (`gh`)

@@ -228,11 +228,35 @@ When the user asks to set up or initialize a project environment, follow this se
 
 ---
 
+## Browser Automation → playwright-cli
+
+`playwright-cli` is installed globally and available as `playwright-cli` when NVM is active.
+
+- **Package:** `@playwright/cli` v0.1.14 (Microsoft — `github.com/microsoft/playwright-cli`)
+- **Binary:** `/Users/devbodegami/.nvm/versions/node/v24.18.0/bin/playwright-cli`
+
+Before any browser automation or E2E task, read `./docs/guides/playwright.md`.
+
+**Critical:** headless browsers are blocked by CloudFront on authenticated sites (e.g. Figma). To attach to a real Chrome session without closing the existing browser:
+
+```bash
+# Open a second Chrome instance with debugging (leaves existing Chrome untouched)
+/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome \
+  --remote-debugging-port=9222 \
+  --user-data-dir=/tmp/chrome-debug-profile &
+
+# Attach playwright-cli
+playwright-cli attach --cdp=http://localhost:9222
+```
+
+---
+
 ## MCP Servers & Secrets
 
 No MCP servers are currently configured. When a task requires one:
 
 - **GitHub MCP** — requires the env var `GITHUB_TOKEN` (GitHub Personal Access Token with `repo` and `read:org` scopes).
+- **Figma MCP** — API-based access to Figma designs; has a **daily rate limit**. When rate-limited, use playwright-cli + Chrome CDP to access Figma via browser (see `./docs/guides/playwright.md`).
 - For GitHub operations, prefer the `gh` CLI first. Fall back to GitHub MCP only if `gh` is unavailable.
 
 ```bash

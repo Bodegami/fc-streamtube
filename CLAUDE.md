@@ -15,6 +15,7 @@ fc-streamtube/ (monorepo root)
 │   │   ├── docker-k8s.md             <-- Containerization standards
 │   │   ├── testing-strategy.md       <-- Testing approach and rules
 │   │   ├── machine-environment.md    <-- Local toolchain and setup
+│   │   ├── playwright.md             <-- Browser automation: playwright-cli + Figma access
 │   │   ├── clean-architecture.md     <-- Architecture guide: Clean Architecture
 │   │   ├── domain-driven-design.md   <-- Architecture guide: DDD
 │   │   ├── software-architecture.md  <-- Architecture guide: Hexagonal, Onion, BFF
@@ -62,6 +63,7 @@ Guide files are located at `./docs/guides/`. If the file does not exist, fall ba
 - **Containerization**: Read `./docs/guides/docker-k8s.md` before any `docker`, `docker compose`, `orb`, or `kubectl` command.
 - **Testing**: Read `./docs/guides/testing-strategy.md` before writing or modifying any tests.
 - **Environment/Setup**: Read `./docs/guides/machine-environment.md` before any of: setting up a project, installing dependencies, running tests, switching language versions (Java, Python, Node), using Maven, diagnosing runtime issues, or any task that involves the local machine toolchain.
+- **Browser Automation / E2E / Figma via browser**: Read `./docs/guides/playwright.md` before using `playwright-cli`, writing E2E tests, or accessing Figma when the MCP is rate-limited.
 
 ## 2. Universal Standards (Short Rules)
 
