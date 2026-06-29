@@ -14,11 +14,15 @@
 com.fcstreamtube/
 ├── domain/
 │   ├── entities/       ← Entidades de domínio puras (sem anotações de infra)
+│   ├── exceptions/     ← Exceções lançadas pelas regras de negócio
 │   └── repositories/   ← Interfaces (contratos de persistência)
 ├── application/
-│   └── usecases/       ← Um UseCase por ação (CreateXxxUseCase, etc.)
+│   ├── usecases/       ← Um UseCase por ação (CreateXxxUseCase, etc.)
+│   └── ports/
+│       └── out/        ← Output Ports (interfaces de saída: EmailGateway, etc.)
 ├── infrastructure/     ← Implementações JPA, adapters externos
 └── interfaces/
+    ├── advice/         ← @RestControllerAdvice (GlobalExceptionHandler)
     └── controllers/    ← Controllers REST (Spring MVC)
 ```
 

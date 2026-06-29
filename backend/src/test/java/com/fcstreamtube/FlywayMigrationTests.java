@@ -41,12 +41,12 @@ class FlywayMigrationTests {
     }
 
     @Test
-    void givenBlankDatabase_whenApplicationStarts_thenNoDomainTablesExist() {
+    void givenAllMigrations_whenApplicationStarts_thenAllDomainTablesExist() {
         Integer count = jdbcTemplate.queryForObject(
             "SELECT COUNT(*) FROM information_schema.tables " +
             "WHERE table_schema = 'public' AND table_name != 'flyway_schema_history'",
             Integer.class
         );
-        assertThat(count).isEqualTo(0);
+        assertThat(count).isEqualTo(2); // users + user_tokens (V2, V3)
     }
 }
